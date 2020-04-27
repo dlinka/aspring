@@ -1,13 +1,14 @@
 package com.cr.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
 
-    @RequestMapping("/hello")
+    @GetMapping("/hello")
     public String hello(){
         return "user/hello";
     }

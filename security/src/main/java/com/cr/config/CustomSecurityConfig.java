@@ -4,12 +4,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import javax.servlet.http.HttpSession;
 
 @Configuration
 public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -48,7 +51,16 @@ public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").hasRole("admin")
                 .anyRequest().authenticated()
             .and()
-            .formLogin().loginPage("/login").loginProcessingUrl("/login").defaultSuccessUrl("/").permitAll()
+            .formLogin()
+                .loginPage("/login").loginProcessingUrl("/login").defaultSuccessUrl("/")
+                .failureHandler((request, response, exception)->{
+                    HttpSession session = request.getSession();
+                    if(exception instanceof BadCredentialsException){
+                        session.setAttribute("errorMsg", "用户名或者密码输入错误，请重新输入!");
+                    }
+                    response.sendRedirect("/login?error");
+                })
+                .permitAll()
             .and()
             .csrf().disable();
         ;

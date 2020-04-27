@@ -10,6 +10,7 @@
     </style>
 </head>
 <body>
+<#if errorMsg??>${errorMsg}</#if>
 <!-- partial:index.partial.html -->
 <form action="/login" method="post" class="form" autocomplete="off">
     <div class="form-inner">

@@ -1,13 +1,14 @@
 package com.cr.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
 
-    @RequestMapping("/hello")
+    @GetMapping("/hello")
     public String admin(){
         return "admin/hello";
     }
